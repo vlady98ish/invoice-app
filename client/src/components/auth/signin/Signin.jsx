@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from "axios";
+import {useContext} from "react";
+import AuthContext from "../../../context/AuthContext";
 function Copyright(props) {
 	return (
 		<Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -33,7 +35,7 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
 	axios.defaults.withCredentials = true
-	const history = useHistory()
+	const {login} = useContext(AuthContext)
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 		const data = new FormData(event.currentTarget);
@@ -44,20 +46,10 @@ export default function SignIn() {
 		const username = data.get('email')
 		const password = data.get('password')
 		
-		try{
-			// const response = await axios.post('http://localhost:4000/api/login',
-			// 	{
-			// 		username,
-			// 		password
-			// 	}
-			// 	)
-		
-		
-				history.push('/')
-			
-		} catch (error){
-			console.log("Error to login")
-		}
+		await login({
+			username,
+			password
+		})
 	};
 	
 	return (

@@ -4,20 +4,19 @@ import SignIn from "./components/auth/signin/Signin";
 import SignUp from "./components/auth/signup/SignUp";
 import axios from "axios";
 import InvoiceDashboard from "./components/dashboard/InvoiceDashboard";
-import { useCookies } from "react-cookie";
-import {useState} from "react";
+import AuthContext, {AuthContextProvider} from "./context/AuthContext";
+import {useContext} from "react";
+
 const PrivateRoute = ({ component: Component,cookies, ...rest }) => {
-  const [isAuthenticated,setIsAuthenticated] = useState()
-  if(cookies){
-    setIsAuthenticated(isAuthenticated)
-  }
+  const {user} = useContext(AuthContext)
+ 
   
-  console.log(isAuthenticated)
+  console.log(user)
   return (
     <Route
       {...rest}
       render={(props) =>
-        isAuthenticated ? (
+        user ? (
           <Component {...props} />
         ) : (
           <Redirect to="/signin" />
@@ -28,16 +27,17 @@ const PrivateRoute = ({ component: Component,cookies, ...rest }) => {
 };
 
 function App() {
-  const [cookies, setCookies] = useCookies();
-  axios.defaults.withCredentials = true
+   axios.defaults.withCredentials = true
   return (
     <BrowserRouter>
+    <AuthContextProvider>
       <Switch>
+        <PrivateRoute  exact path="/" component={InvoiceDashboard}/>
         <Route exact path="/signin" component={SignIn} />
         <Route exact path="/signup"  component={SignUp}/>
-        <PrivateRoute  exact path="/" component={InvoiceDashboard} cookies={cookies}/>
         {/* Other routes */}
       </Switch>
+    </AuthContextProvider>
     </BrowserRouter>
     
   );
