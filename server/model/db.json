@@ -1,4 +1,11 @@
 {
-  "users": [],
+  "users": [
+    {
+      "id": "953a6147-4860-42ba-9cd0-683e57e560d7",
+      "username": "jokernaale",
+      "password": "123456",
+      "email": "jokernaale@gmail.com"
+    }
+  ],
   "invoices": []
 }
